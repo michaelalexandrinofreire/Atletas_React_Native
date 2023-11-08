@@ -30,9 +30,15 @@ export default function Player({
     >
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         <Image
-          source={{ uri: playerImage }}
+          source={{
+            uri:
+              typeof playerImage === "string" && playerImage !== ""
+                ? playerImage
+                : "https://t4.ftcdn.net/jpg/00/65/77/27/360_F_65772719_A1UV5kLi5nCEWI0BNLLiFaBPEkUbv5Fv.jpg",
+          }}
           style={{ width: 128, height: 128, borderRadius: 64 }}
         />
+
         <TouchableOpacity
           style={{
             position: "absolute",

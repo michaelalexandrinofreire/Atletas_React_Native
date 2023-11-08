@@ -1,11 +1,11 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 export default function Login() {
   const navigation = useNavigation();
 
   function navigateToHome() {
-    navigation.navigate('Atletas')
+    navigation.navigate("Atletas");
   }
   return (
     <View
@@ -13,9 +13,10 @@ export default function Login() {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "rgb(37 99 235)",
+        backgroundColor: "white",
       }}
     >
+      <Image source={require("../assets/icon.png")} />
       <TouchableOpacity
         style={{
           backgroundColor: "rgb(234 179 8)",

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "atlestas_app",
-    "slug": "atlestas_app",
+    "name": "Atlestas",
+    "slug": "Atlestas",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

@@ -1,15 +1,14 @@
+import React, { useState } from "react";
 import {
+  View,
+  Text,
   TextInput,
   TouchableOpacity,
-  View,
   ScrollView,
-  Text,
 } from "react-native";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useState, useEffect } from "react";
-import { FontAwesome } from "@expo/vector-icons";
 import Player from "../components/Player";
 import { useNavigation } from "@react-navigation/native";
 
@@ -38,6 +37,10 @@ export default function Home() {
   };
 
   const navigation = useNavigation();
+
+  const uniquePlayers = players.filter((player, index, self) =>
+    index === self.findIndex((p) => p.player_key === player.player_key)
+  );
 
   return (
     <SafeAreaView
@@ -121,8 +124,8 @@ export default function Home() {
             gap: 25,
           }}
         >
-          {Array.isArray(players) ? (
-            players.map((player, index) => (
+          {Array.isArray(uniquePlayers) ? (
+            uniquePlayers.map((player, index) => (
               <Player
                 key={player.player_key}
                 playerAge={player.player_age}
@@ -141,7 +144,7 @@ export default function Home() {
                     );
                   }
                 }}
-                playerImage={player.player_image}
+                playerImage={typeof player.player_image === 'string' ? player.player_image : 'https://louisville.edu/enrollmentmanagement/images/person-icon/image'}
                 playerName={player.player_name}
                 playerTime={player.player_team}
               />
