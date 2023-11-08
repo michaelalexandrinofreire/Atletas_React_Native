@@ -1,12 +1,11 @@
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Home from "./screens/Home";
 import Favoritos from "./screens/Favoritos";
+import Login from "./screens/Login";
 
-const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -20,15 +19,11 @@ export default function App() {
           headerTintColor: "white",
           headerTitleAlign: "center",
         }}
+        initialRouteName="Login"
       >
-        <Stack.Screen
-          name="Atletas"
-          component={Home}
-        />
-        <Stack.Screen
-          name="Favoritos"
-          component={Favoritos}
-        />
+        <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
+        <Stack.Screen name="Atletas" component={Home} />
+        <Stack.Screen name="Favoritos" component={Favoritos} />
       </Stack.Navigator>
     </NavigationContainer>
   );
