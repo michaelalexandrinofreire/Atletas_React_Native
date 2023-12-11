@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ export default function Home() {
   const [players, setPlayers] = useState([]);
   const [favoritePlayers, setFavoritePlayers] = useState([]);
   const [error, setError] = useState(null);
+  const [temperature, setTemperature] = useState(null);
 
   const handleSearch = async () => {
     if (playerName === "") {
@@ -25,7 +26,7 @@ export default function Home() {
 
     try {
       const response = await axios.get(
-        `https://apiv3.apifootball.com/?action=get_players&player_name=${playerName}&APIkey=89216a0f2caa92bc7cfe9a4de79cecbc35feab2955d4f6b88478715113426cc3`
+        `https://apiv3.apifootball.com/?action=get_players&player_name=${playerName}&APIkey=29c97ffc0ddec5b39553514e05e2a4330b3f6c8813be8af44ec7fdd989bf205a`
       );
 
       setPlayers(response.data);
@@ -38,9 +39,29 @@ export default function Home() {
 
   const navigation = useNavigation();
 
-  const uniquePlayers = players.filter((player, index, self) =>
-    index === self.findIndex((p) => p.player_key === player.player_key)
+  const uniquePlayers = players.filter(
+    (player, index, self) =>
+      index === self.findIndex((p) => p.player_key === player.player_key)
   );
+
+  useEffect(() => {
+    const fetchTemperature = async () => {
+      try {
+        const response = await axios.get(
+          "https://api.thingspeak.com/channels/SEU_NUMERO_DE_CANAL/fields/1/last.json"
+        );
+
+        setTemperature(response.data.field1);
+      } catch (error) {
+        console.error("Erro ao buscar temperatura:", error);
+      }
+    };
+
+    fetchTemperature();
+    const intervalo = setInterval(fetchTemperature, 60000);
+
+    return () => clearInterval(intervalo);
+  }, []);
 
   return (
     <SafeAreaView
@@ -50,6 +71,12 @@ export default function Home() {
         alignItems: "center",
       }}
     >
+      <View style={{ flexDirection: "row", gap: 3 }}>
+        <Text style={{ color: "#FFF" }}>Temperatura:</Text>
+        <Text style={{ color: "yellow", fontSize: 16, fontWeight: "600" }}>
+          {temperature !== null ? temperature.toFixed(2) : "Carregando"}
+        </Text>
+      </View>
       <View style={{ flexDirection: "row", gap: 10 }}>
         <TextInput
           style={{
@@ -93,8 +120,8 @@ export default function Home() {
           justifyContent: "center",
           alignItems: "center",
           marginBottom: 10,
-          flexDirection: 'row',
-          gap: 10
+          flexDirection: "row",
+          gap: 10,
         }}
       >
         <AntDesign name="star" size={20} color="white" />
@@ -144,7 +171,11 @@ export default function Home() {
                     );
                   }
                 }}
-                playerImage={typeof player.player_image === 'string' ? player.player_image : 'https://louisville.edu/enrollmentmanagement/images/person-icon/image'}
+                playerImage={
+                  typeof player.player_image === "string"
+                    ? player.player_image
+                    : "https://louisville.edu/enrollmentmanagement/images/person-icon/image"
+                }
                 playerName={player.player_name}
                 playerTime={player.player_team}
               />
